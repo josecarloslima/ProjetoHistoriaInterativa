@@ -1,8 +1,37 @@
+/* PÁGINA */
 body {
     font-family: Arial, Helvetica, sans-serif;
     text-align: center;
+    background-color: peachpuff;
 }
 
+#story{
+    background-color: floralwhite;
+    width: 500px;
+    height: 500px;
+    margin: auto;
+    padding: 20px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+}
+
+button {
+    margin: 20px auto;
+    cursor: pointer;
+    border-radius: 5px;    
+    padding: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+    display: block;
+}
+
+.btnEscolha,
+.btnReiniciar {    
+    border: none;
+    font-weight: bold;
+    background-color: floralwhite;
+}
+
+/* MODAL */
 .modal {
     display: none;
     position: fixed;
@@ -19,7 +48,7 @@ body {
     background-color: #fefefe;
     margin: 15% auto;
     padding: 20px;
-    border: 1px solid #888;
+    border: 5px solid black;
     width: 80%;
 }
 
@@ -37,6 +66,6 @@ body {
     cursor: pointer;
 }
 
-button {
-    margin: 10px;
+.btnModal {
+    background-color: peachpuff;
 }
