@@ -3,22 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>História Interativa</title>
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <title>História Interativa</title>
 </head>
 <body>
-    <div id="story" class="container">
-        <!-- O conteúdo da história será inserido aqui pelo JavaScript -->
-    </div>    
-
-    <!--Inserindo a JANELA MODAL-->
-    <button class="btnModal" onclick="toggleModal()">Abrir Modal</button>
-    <div id="myModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="toggleModal()">&times;</span>
-            <p>Conteúdo da Janela Modal</p>
-        </div>
+    <div class="container">
+        <button class="button" id="inicio">Início</button>
+        <button class="button" id="site">Site Externo</button>
+        <button class="button" id="regras">Regras</button>
     </div>
+    <div class="story" id="storyContent"></div>
+
+    <script src="script.js"></script>
 </body>
 </html>

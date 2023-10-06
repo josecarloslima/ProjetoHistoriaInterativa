@@ -1,65 +1,158 @@
-let progresso = 0;
+function getStory(scene) {
+    const scenes = {
+        inicio: {
+            title: "Início",
+            text: "Texto do início da história...",
+            choices: {
+                cena1: "Ir para Cena 1",
+                regras: "Ver Regras"
+            }
+        },
+        cena1: {
+            title: "Cena 1",
+            text: "Texto da Cena 1...",
+            choices: {
+                cena2: "Ir para Cena 2",
+                cena3: "Ir para Cena 3",
+                fim: "Fim da História"
+            },
+            showRollDiceButton: true
+        },
+        cena2: {
+            title: "Cena 2",
+            text: "Texto da Cena 2...",
+            choices: {
+                cena1: "Voltar para Cena 1",
+                cena3: "Ir para Cena 3",
+                fim: "Fim da História"
+            }
+        },
+        cena3: {
+            title: "Cena 3",
+            text: "Texto da Cena 3...",
+            choices: {
+                cena1: "Voltar para Cena 1",
+                cena2: "Voltar para Cena 2",
+                fim: "Fim da História"
+            }
+        },
+        fim: {
+            title: "Fim da História",
+            text: "Fim da História. Obrigado por jogar!",
+            choices: {}
+        },
+        regras: {
+            title: "Regras",
+            text: "Aqui estão as regras do jogo...",
+            choices: {
+                inicio: "Voltar ao Início"
+            }
+        },
+        sucesso: {
+            title: "Sucesso",
+            text: "Você teve sucesso!",
+            choices: {
+                proximaCena: "Próxima Cena"
+            }
+        },
+        falha: {
+            title: "Falha",
+            text: "Você falhou...",
+            choices: {
+                proximaCena: "Próxima Cena"
+            }
+        }
+    };
 
-const historia = [
-    {
-        texto: "Você está no início da jornada. Escolha um caminho:",
-        escolhas: [
-            { texto: "Caminho da Esquerda", caminho: 1 },
-            { texto: "Caminho da Direita", caminho: 2 }
-        ]
-    },
-    {
-        texto: "O caminho se mostra vívido e cheio de cores. Um cheiro de café da manhã inunda seus sentidos. Você...",
-        escolhas: [
-            { texto: "Segue o cheiro", caminho: 3 },
-            { texto: "Resolve não se aproximar e seguir seu caminho", caminho: 4 }
-        ]
-    },
-    {
-        texto: "Ao olhar para trás você não vê a divisão dos caminhos, parece que só existia este caminho. E você caminha, seguro de que está na direção certa. Até que...",
-        escolhas: [
-            { texto: "Tem a atenção atraída por um sapo que pula num riacho ao lado, o qual você, misteriosamente, não havia percebido?", caminho: 5 },
-            { texto: "Percebe que não está mais sozinho em seu caminho!", caminho: 6 }
-        ]
-    },
-    // Adicione mais passos da história conforme necessário...
-];
+    const currentScene = scenes[scene];
 
-function mostrarPasso(progresso) {
-    const passoAtual = historia[progresso];
-    let botoesEscolha = passoAtual.escolhas.map(escolha => `
-        <button class="btnEscolha" onclick="escolhaCaminho(${escolha.caminho})">${escolha.texto}</button>
-    `).join('');
-
-    let botaoReiniciar = '';
-    if (progresso > 0) {
-        botaoReiniciar = '<button class="btnReiniciar" onclick="restart()">Reiniciar</button>';
+    if (!currentScene) {
+        console.error(`Cena "${scene}" não encontrada.`);
+        return;
     }
-    document.getElementById('story').innerHTML = `
-        <p>${passoAtual.texto}</p>
-        ${botoesEscolha}
-        ${botaoReiniciar}
+
+    let storyContent = `
+        <h1>${currentScene.title}</h1>
+        <p>${currentScene.text}</p>
     `;
+
+    if (currentScene.choices) {
+        for (const [key, value] of Object.entries(currentScene.choices)) {
+            storyContent += `<button class="choice" data-target="${key}">${value}</button>`;
+        }
+    }
+
+    if (currentScene.showRollDiceButton) {
+        storyContent += `<button class="button" id="rolarDados">Rolar Dados</button>`;
+    }
+
+    document.getElementById('storyContent').innerHTML = storyContent;
+
+    document.querySelectorAll('.choice').forEach(button => {
+        button.addEventListener('click', function() {
+            const target = this.dataset.target;
+            getStory(target);
+        });
+    });
+
+    if (currentScene.showRollDiceButton) {
+        document.getElementById('rolarDados').addEventListener('click', rolarDados);
+    }
 }
 
-function escolhaCaminho(caminho) {
-    progresso = caminho;
-    mostrarPasso(progresso);
+// Restante do código (generateButtons e etc.)
+
+function rolarDados() {
+    const resultado = Math.floor(Math.random() * 6) + 1;
+    const sucesso = resultado >= 4;
+
+    if (sucesso) {
+        getStory('sucesso'); 
+    } else {
+        getStory('falha'); 
+    }
 }
 
-function restart() {
-    progresso = 0;
-    mostrarPasso(progresso);
+
+function generateButtons() {
+    const buttons = {
+        inicio: "Início",
+        site: "Site Externo",
+        regras: "Regras"
+    };
+
+    let buttonHtml = '';
+    for (const [key, value] of Object.entries(buttons)) {
+        buttonHtml += `<button class="button" id="${key}">${value}</button>`;
+    }
+
+    document.querySelector('.container').innerHTML = buttonHtml;
+
+    document.getElementById('inicio').addEventListener('click', function() {
+        getStory('inicio');
+    });
+
+    document.getElementById('site').addEventListener('click', function() {
+        window.location.href = 'https://www.siteexterno.com';
+    });
+
+    document.getElementById('regras').addEventListener('click', function() {
+        getStory('regras');
+    });
 }
 
-// Iniciar a história
 document.addEventListener('DOMContentLoaded', function() {
-    mostrarPasso(progresso);
+    generateButtons();
+    getStory('inicio');
 });
 
+function rolarDados() {
+    const resultado = Math.floor(Math.random() * 6) + 1;
+    const sucesso = resultado >= 4;
 
-// Modal
-function toggleModal(){
-    var modal = document.getElementById('myModal');
-    modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    if (sucesso) {
+        getStory('sucesso'); 
+    } else {
+        getStory('falha'); 
+    }
 }
